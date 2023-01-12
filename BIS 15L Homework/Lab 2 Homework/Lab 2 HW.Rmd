@@ -13,9 +13,11 @@ Answer the following questions and complete the exercises in RMarkdown. Please e
 
 Make sure to use the formatting conventions of RMarkdown to make your report neat and clean!  
 
-1. What is a vector in R?  
+1. What is a vector in R?
+Vectors are sets of data made using the command "c" for concatenate. Vectors can be composed of any of the five classes of date (numeric, integer, character, logical, complex). In R, they are presented as objects.
 
 2. What is a data matrix in R?  
+A data matrix is a series of stacked values, essentially a data table composed of multiple vectors.
 
 3. Below are data collected by three scientists (Jill, Steve, Susan in order) measuring temperatures of eight hot springs. Run this code chunk to create the vectors.  
 ```{r}
