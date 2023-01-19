@@ -28,10 +28,6 @@ library(tidyverse)
 sleep <- readr::read_csv("lab3_hw_data/mammals_sleep_allison_cicchetti_1976.csv")
 ```
 ```{r}
-View(sleep)
-```
-
-```{r}
 sleep <- replace(sleep, sleep == -999.0, NA)
 sleep
 ```
@@ -97,6 +93,7 @@ which.max(sleep$`total sleep (hrs/day)  (sum of slow wave and paradoxical sleep)
 ```{r}
 sleep[33,]
 ```
+Little Brown Bat is the sleepiest animal in the dataframe.
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.   
