@@ -3,9 +3,9 @@ title: "Lab 3 Homework"
 author: "Ananda Leia"
 date: "1/19/2023"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
-    toc: no
+    keep_md: yes
 ---
 
 ## Instructions
