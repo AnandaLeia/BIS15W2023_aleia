@@ -123,5 +123,6 @@ for (i in 1:ncol(hot_spring_matrix)) {Scientist_SD[i]=sd(hot_spring_matrix[ ,i])
 sd_scientist_matrix <- rbind(hot_spring_matrix, Scientist_SD)
 sd_scientist_matrix
 ```
+ggplot()
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  
