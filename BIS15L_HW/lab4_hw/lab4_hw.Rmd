@@ -19,7 +19,7 @@ Make sure to use the formatting conventions of RMarkdown to make your report nea
 
 ## Load the tidyverse
 ```{r message=FALSE, warning=FALSE}
-library(tidyverse)
+#library(tidyverse)
 ```
 
 ## Data
@@ -30,24 +30,97 @@ Reference: Tamburello N, Cote IM, Dulvy NK (2015) Energy and the scaling of anim
 Data: http://datadryad.org/resource/doi:10.5061/dryad.q5j65/1  
 
 **1. Load the data into a new object called `homerange`.**
+```{r}
+homerange <- readr::read_csv("lab4_hw_data/Tamburelloetal_HomeRangeDatabase.csv")
+homerange
+```
+```{r}
+View(homerange)
+```
 
 **2. Explore the data. Show the dimensions, column names, classes for each variable, and a statistical summary. Keep these as separate code chunks.**  
+```{r}
+dim(homerange)
+```
+```{r}
+names(homerange)
+```
+```{r}
+lapply(homerange, class)
+```
+```{r}
+summary(homerange)
+```
+```{r}
+str(homerange)
+```
 
 **3. Change the class of the variables `taxon` and `order` to factors and display their levels.**  
+```{r}
+homerange$taxon <- as.factor(homerange$taxon)
+class(homerange$taxon)
+```
+```{r}
+homerange$order <- as.factor(homerange$order)
+class(homerange$order)
+```
 
-**4. What taxa are represented in the `homerange` data frame? Make a new data frame `taxa` that is restricted to taxon, common name, class, order, family, genus, species.**  
+**4. What taxa are represented in the `homerange` data frame? Make a new data frame `taxa` that is restricted to taxon, common name, class, order, family, genus, species.**
+```{r}
+taxa <- select(homerange, taxon, common.name, class, order, family, genus, species)
+taxa
+```
 
-**5. The variable `taxon` identifies the large, common name groups of the species represented in `homerange`. Make a table the shows the counts for each of these `taxon`.**  
+**5. The variable `taxon` identifies the large, common name groups of the species represented in `homerange`. Make a table the shows the counts for each of these `taxon`.**
+```{r}
+taxon_counts <- table(homerange$taxon)
+taxon_counts
+```
 
 **6. The species in `homerange` are also classified into trophic guilds. How many species are represented in each trophic guild.**  
+```{r}
+trophic_counts <- table(homerange$trophic.guild)
+trophic_counts
+```
 
 **7. Make two new data frames, one which is restricted to carnivores and another that is restricted to herbivores.**  
+```{r}
+carnivores <- filter(homerange, trophic.guild =="carnivore")
+carnivores
+```
+```{r}
+herbivores <- filter(homerange, trophic.guild =="herbivore")
+herbivores
+```
 
 **8. Do herbivores or carnivores have, on average, a larger `mean.hra.m2`? Remove any NAs from the data.**  
+```{r}
+mean(herbivores$mean.hra.m2, na.rm=T)
+```
+```{r}
+mean(carnivores$mean.hra.m2, na.rm=T)
+```
+Herbivores have a larger average `mean.hra.m2` of 34137012 than carnivores' `mean.hra.m2` of 13039918.
 
 **9. Make a new dataframe `deer` that is limited to the mean mass, log10 mass, family, genus, and species of deer in the database. The family for deer is cervidae. Arrange the data in descending order by log10 mass. Which is the largest deer? What is its common name?**  
+```{r}
+pre_deer <- homerange[grep("deer", homerange$common.name), ]
+pre_deer
+```
+```{r}
+deer <- select(pre_deer, mean.mass.g, log10.mass, family, genus, species)
+deer
+```
 
-**10. As measured by the data, which snake species has the smallest homerange? Show all of your work, please. Look this species up online and tell me about it!** **Snake is found in taxon column**    
+**10. As measured by the data, which snake species has the smallest homerange? Show all of your work, please. Look this species up online and tell me about it!** **Snake is found in taxon column**  
+```{r}
+snakes <- homerange[grep("snake", homerange$taxon), ]
+snakes
+```
+```{r}
+snakes[which.min(snakes$mean.hra.m2),]
+```
+The Namaqua Dwarf Adder, or Bitis schneideri, is a species of viper native to a small duney area on the coast of Namaqualand, in Namibia and South Africa. It is recorded as the smallest viper in the world. It is primarily diurnal. It hunts small lizards and rain frogs. It has a triangular head and lightly mottled yellow-sand-colored scales. It is categorized as a vulnerable population.
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.   

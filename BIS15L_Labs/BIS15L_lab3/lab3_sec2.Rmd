@@ -25,7 +25,7 @@ At this point, you should have familiarity in RStudio, GitHub, and basic operati
 Tidyverse is a package of tools that work together. You have to install it on your computer, you should only install it once on your computer, and you only have to run it once per session.
 ## Load the tidyverse
 ```{r message=FALSE, warning=FALSE}
-library("tidyverse")
+#library("tidyverse")
 ```
 
 ## Data Frames
