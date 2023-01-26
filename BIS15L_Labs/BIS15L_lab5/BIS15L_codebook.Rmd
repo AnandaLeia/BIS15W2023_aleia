@@ -1,0 +1,19 @@
+---
+title: "BIS15L_codebook"
+author: "Ananda Leia"
+date: "2023-01-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Create new R codeblock command-option-i
+
+Replace -999.0 with NA in dataframe
+```{r}
+df %>% 
+  mutate(new_column = ifelse(column_name == -999.0, NA, column_name))
+```
+
