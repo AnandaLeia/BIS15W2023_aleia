@@ -1,6 +1,7 @@
 ---
 title: "dplyr Superhero"
-date: "`r Sys.Date()`"
+name: "Ananda Leia"
+date: "1/26/2023"
 output:
   html_document: 
     theme: spacelab
@@ -19,17 +20,18 @@ These are data taken from comic books and assembled by fans. The include a good 
 
 Check out the way I am loading these data. If I know there are NAs, I can take care of them at the beginning. But, we should do this very cautiously. At times it is better to keep the original columns and data intact.  
 ```{r}
-superhero_info <- readr::read_csv("data/heroes_information.csv", na = c("", "-99", "-"))
+superhero_info <- readr::read_csv("lab5_data/heroes_information.csv", na = c("", "-99", "-"))
 ```
 
 ```{r}
-superhero_powers <- readr::read_csv("data/super_hero_powers.csv", na = c("", "-99", "-"))
+superhero_powers <- readr::read_csv("lab5_data/super_hero_powers.csv", na = c("", "-99", "-"))
 ```
 
 ## Data tidy
 1. Some of the names used in the `superhero_info` data are problematic so you should rename them here.  
 ```{r}
-
+superhero_info <- janitor::clean_names(superhero_info)
+superhero_info
 ```
 
 Yikes! `superhero_powers` has a lot of variables that are poorly named. We need some R superpowers...
@@ -46,6 +48,7 @@ library("janitor")
 The `clean_names` function takes care of everything in one line! Now that's a superpower!
 ```{r}
 superhero_powers <- janitor::clean_names(superhero_powers)
+superhero_powers
 ```
 
 ## `tabyl`
@@ -57,70 +60,110 @@ The `janitor` package has many awesome functions that we will explore. Here is i
 
 2. Notice that we have some neutral superheros! Who are they?
 ```{r}
-
+superhero_info %>% 
+  filter(alignment == "neutral") %>% 
+  select(name)
 ```
 
 ## `superhero_info`
 3. Let's say we are only interested in the variables name, alignment, and "race". How would you isolate these variables from `superhero_info`?
 ```{r}
-
+superhero_info %>% 
+  select(name, alignment, race)
 ```
 
 ## Not Human
 4. List all of the superheros that are not human.
 ```{r}
-
+nonhumans <- superhero_info %>% 
+  select(name) %>% 
+  filter(superhero_info$race != "human")
+nonhumans
 ```
 
 ## Good and Evil
 5. Let's make two different data frames, one focused on the "good guys" and another focused on the "bad guys".
 ```{r}
-
+good_guys <- superhero_info %>% 
+  filter(superhero_info$alignment=="good")
+good_guys
 ```
 
 ```{r}
-
+bad_guys <- superhero_info %>% 
+  filter(superhero_info$alignment=="bad")
+bad_guys
 ```
 
 6. For the good guys, use the `tabyl` function to summarize their "race".
 ```{r}
-
+tabyl(good_guys$race)
 ```
 
 7. Among the good guys, Who are the Asgardians?
 ```{r}
-
+good_guys %>% 
+  filter(good_guys$race == "Asgardian") %>% 
+  select(name)
 ```
 
 8. Among the bad guys, who are the male humans over 200 inches in height?
 ```{r}
-
+bad_guys %>% 
+  filter(race== "Human") %>% 
+  filter(gender=="Male") %>%
+  filter(height>200) %>% 
+  select(name)
 ```
 
 9. OK, so are there more good guys or bad guys that are bald (personal interest)?
 ```{r}
-
+good_guys %>% 
+  filter(hair_color == "No Hair")
 ```
+```{r}
+bad_guys %>% 
+  filter(hair_color == "No Hair")
+```
+There are 37 good guys with no hair and 35 bad guys with no hair.
 
 10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight greater than or equal to 450?
 ```{r}
-
+superhero_info %>% 
+  filter(height>300 | weight>=450) %>% 
+  select(name, gender, race, height, weight, publisher, alignment)
 ```
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
 ```{r}
-
+superhero_info %>% 
+  filter(height>300) %>% 
+  select(name, gender, race, height, weight, publisher, alignment)
 ```
 
 12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
 ```{r}
-
+superhero_info %>% 
+  filter(weight>450) %>% 
+  select(name, gender, race, height, weight, publisher, alignment)
 ```
+There are 8 heros with height over 300 and 8 with weight over 450. However, since | means "and/or" and there is some overlap (some heros meet both conditions), question 10 gives us 14 heros that mean one or both of the conditions to be "big". Also, question ten asks for heros with height over 200 rather than 300, which naturally includes more than question 11.
 
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 ```{r}
-
+hw_ratios <- superhero_info %>% 
+  mutate(height_to_weight = weight/height, na.rm=T) %>% 
+  select(name, height, weight, height_to_weight)
+hw_ratios
+```
+```{r}
+hw_ratios %>% 
+  arrange(desc(hw_ratios$height_to_weight))
+```
+```{r}
+which.max(hw_ratios$height_to_weight)
+hw_ratios[284,]
 ```
 
 ## `superhero_powers`
@@ -131,13 +174,16 @@ glimpse(superhero_powers)
 
 14. How many superheros have a combination of accelerated healing, durability, and super strength?
 ```{r}
-
+superhero_powers %>% 
+  filter(accelerated_healing==TRUE & durability==TRUE & super_strength==TRUE) %>% 
+  select(hero_names, accelerated_healing, durability, super_strength)
 ```
 
 ## Your Favorite
 15. Pick your favorite superhero and let's see their powers!
 ```{r}
-
+superhero_powers %>% 
+  filter(hero_names=="Poison Ivy")
 ```
 
 ## Push your final code to GitHub!
