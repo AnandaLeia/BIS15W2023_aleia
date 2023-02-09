@@ -1,0 +1,35 @@
+---
+title: "lab9_warmup"
+author: "Ananda Leia"
+date: "2023-02-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Import Dataframe
+```{r}
+malaria <- read.csv("lab9_data/malaria.csv") %>% 
+  janitor::clean_names()
+malaria
+```
+Pivot into longform dataframe
+```{r}
+malaria_tidy <- malaria %>% 
+  pivot_longer(cols = contains("rdt"),
+             names_to = c("age_group"),
+             names_prefix = ("malaria_rdt_"),
+             values_to = "cases") %>% 
+  select(province, district, location_name, data_date, age_group, cases)
+malaria_tidy
+```
+
+```{r}
+malaria_tidy %>% 
+  filter(data_date == "2020-07-03") %>% 
+  group_by(district) %>% 
+  summarize(total_cases = sum(cases, na.rm=T))
+```
+
