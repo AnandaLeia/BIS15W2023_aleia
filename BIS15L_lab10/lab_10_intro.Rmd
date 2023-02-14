@@ -1,0 +1,42 @@
+---
+title: "Lab 10 Intro"
+date: "2/14/2023"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library("jpeg")
+```
+```{r}
+library(tidyverse)
+```
+
+## Seating & Set-up
+1. Please make sure that you sit next to your group members for the rest of the quarter.
+2. Please set-up your computer as normal.
+
+## Warm-up
+1. Please load the homerange data `Tamburelloetal_HomeRangeDatabase.csv`
+2. Show the min, mean, and max log10.mass by taxonomic class in the dataset.
+3. Make a plot that best summarizes this output.
+
+```{r}
+homerange <- read.csv("lab10_data/Tamburelloetal_HomeRangeDatabase.csv") %>% 
+  janitor::clean_names()
+homerange
+```
+```{r}
+homerange_mass <- homerange %>% 
+  group_by(class) %>% 
+  summarize(mean_mass = mean(log10_mass),
+            min_mass = min(log10_mass),
+            max_mass = max(log10_mass))
+homerange_mass
+```
+```{r}
+homerange %>% 
+  ggplot(aes(x=class, y=log10_mass))+
+  geom_boxplot()
+```
+
