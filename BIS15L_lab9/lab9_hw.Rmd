@@ -1,7 +1,7 @@
 ---
 title: "Lab 9 Homework"
-author: "Please Add Your Name Here"
-date: "`r Sys.Date()`"
+author: "Ananda Leia"
+date: "2/14/2023"
 output:
   html_document:
     theme: spacelab
@@ -27,7 +27,9 @@ library(naniar)
 
 For this homework, we will take a departure from biological data and use data about California colleges. These data are a subset of the national college scorecard (https://collegescorecard.ed.gov/data/). Load the `ca_college_data.csv` as a new object called `colleges`.
 ```{r}
-
+colleges <- read.csv("lab9_data/ca_college_data.csv") %>% 
+  janitor::clean_names()
+colleges
 ```
 
 The variables are a bit hard to decipher, here is a key:  
@@ -45,35 +47,55 @@ PFTFTUG1_EF: Percentage of undergraduate students who are first-time, full-time 
 
 1. Use your preferred function(s) to have a look at the data and get an idea of its structure. Make sure you summarize NA's and determine whether or not the data are tidy. You may also consider dealing with any naming issues.
 ```{r}
-
+str(colleges)
 ```
 
 ```{r}
-
+naniar::miss_var_summary(colleges)
 ```
 
 ```{r}
-
+colleges_new <- colleges %>% 
+  rename("college"=instnm,
+         "state"=stabbr,
+         "deg_perc_bio"=pcip26,
+         "annual_cost"=costt4_a,
+         "4yr_comp_rate"=c150_4_pooled,
+         "undergrad_perc_first_time"=pftftug1_ef)
+colleges_new
 ```
 
 2. Which cities in California have the highest number of colleges?
 ```{r}
-
+colleges_by_city <- colleges_new %>% 
+  group_by(city) %>% 
+  summarize(num_colleges = n_distinct(college)) %>% 
+  arrange(desc(num_colleges))
+colleges_by_city
 ```
 
 3. Based on your answer to #2, make a plot that shows the number of colleges in the top 10 cities.
 ```{r}
-
+colleges_by_city %>% 
+  slice_max(num_colleges, n=10) %>%
+  ggplot(aes(x=num_colleges, y=city))+
+  geom_col()
 ```
 
 4. The column `COSTT4_A` is the annual cost of each institution. Which city has the highest average cost? Where is it located?
 ```{r}
-
+colleges_new %>% 
+  group_by(city) %>% 
+  summarize(ave_annual_cost=mean(annual_cost, na.rm=T)) %>% 
+  arrange(desc(ave_annual_cost))
 ```
 
 5. Based on your answer to #4, make a plot that compares the cost of the individual colleges in the most expensive city. Bonus! Add UC Davis here to see how it compares :>).
 ```{r}
-
+colleges_new %>% 
+  filter(city == "Claremont") %>% 
+  ggplot(aes(x=annual_cost, y=college))+ 
+       geom_col(na.rm=T) 
 ```
 
 6. The column `ADM_RATE` is the admissions rate by college and `C150_4_POOLED` is the four-year completion rate. Use a scatterplot to show the relationship between these two variables. What do you think this means?
