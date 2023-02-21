@@ -4,7 +4,5 @@
 
 I'm a Systems and Synthetics Bio Major pushing through prerequisites at the moment. This repository is where I'll be posting homework assignments and coding projects for BIS 15L.
 
-Current goal: create a Sunrise/Sunset calendar that I can input to my google calendar.
-
 ## Contact me
 aleia@ucdavis.edu
