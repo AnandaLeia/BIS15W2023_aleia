@@ -1,0 +1,36 @@
+---
+title: "Load me"
+author: "Ananda Leia"
+date: "2023-02-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Load once per session:
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(naniar)
+library(RColorBrewer)
+library(paletteer)
+```
+
+##Cancel use of Scientific Notation
+```{r}
+options(scipen=999)
+```
+
+##Built in Datasets
+```{r}
+library("gapminder") #country dataset
+```
+
+Convert symbols into NA's
+```{r}
+"dataset_name" <- read_csv(("file/dataset.csv"), na = c("", "NA", "\\", "-999"))
+```
+
