@@ -1,5 +1,5 @@
 ---
-title: "Load me"
+title: "Cheat Sheet"
 author: "Ananda Leia"
 date: "2023-02-28"
 output: html_document
@@ -19,9 +19,72 @@ library(RColorBrewer)
 library(paletteer)
 ```
 
+##Check current working directory
+```{r}
+getwd()
+```
+
 ##Cancel use of Scientific Notation
 ```{r}
 options(scipen=999)
+```
+
+##Calculations in RStudio
+```{r}
+mean()
+median()
+mode()
+sd()
+```
+##Creating Objects
+```{r}
+x <- 4 #assign a value to a variable
+y <- 5 
+z <- sum(x, y) #creating a new object from other objects
+vector <- c(x, y ,z) #create a vector by concatinating objects
+```
+##Creating Vectors
+```{r}
+numeric_vector <- c(1, 2, 3)
+character_vector <- c("one", "two", "three")
+vector_sequence <- c(1:3)
+```
+Viewing objects within a vector
+```{r}
+vector == 15 #pulls out objects with a certain numeric value
+vector == "character" #objectes with a certain character value
+vector[3] #object in the third position of the vector
+# use <, >, <=, >=, !=
+```
+## Create Matrices
+```{r}
+combined_vector <- c(vector1, vector2, vector3)
+matrix_name <- matric(combined_vector, nrow = 3, byrow = T)
+```
+Naming columns and rows of matrix, colnames() or rownames()
+```{r}
+row_vector <- c(name1, name2)
+rownames(matrix_name) <- row_vector
+```
+Creating new column, cbind() or rbind()
+```{r}
+new_col <- rowSum(old_matrix)
+new_matrix <- cbind(old_matrix, new_col)
+```
+
+## Types of Data
+Five frequently used `classes` of data: numeric, integer, character, logical, complex.
+```{r}
+my_numeric <- 42
+my_integer <- 2L #adding an L automatically denotes an integer
+my_character <- "universe"
+my_logical <- FALSE
+my_complex <- 2+4i
+```
+```{r}
+class(object) #find out what kind of data an object is
+is.numberic(object) #find out if a specific object is a specific data class
+as.numberic(object) #convert object to specific data class
 ```
 
 ##Built in Datasets
@@ -29,6 +92,15 @@ options(scipen=999)
 library("gapminder") #country dataset
 ```
 
+##Dealing with NA's
+```{r}
+is.na(object)
+any.na(object)
+```
+Remove NA's
+```{r}
+mean(vector, na.rm = T) #removes NA's from given calculation
+```
 Convert symbols into NA's
 ```{r}
 "dataset_name" <- read_csv(("file/dataset.csv"), na = c("", "NA", "\\", "-999"))
